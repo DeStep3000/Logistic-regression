@@ -4,7 +4,9 @@ import time
 import matplotlib.pyplot as plt
 
 # Задаем размерности n
-n_values = [2, 5, 10]
+n_values = []
+for i in range(10, 101, 10):
+    n_values.append(i)
 
 # Задаем количество тестовых примеров
 N = 100
