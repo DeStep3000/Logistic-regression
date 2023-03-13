@@ -1,15 +1,20 @@
 import numpy as np
+import cvxpy as cp
+import time
 
 # Задаем размерности n
-n_values = []
-for i in range(10, 101, 10):
-    n_values.append(i)
+n_values = [2, 5, 10]
 
 # Задаем количество тестовых примеров
 N = 100
 
 # Задаем коэффициент регуляризации
 alpha = 0.1
+
+# Задаем списки для сохранения значений
+solution_times = []
+global_minima = []
+optimal_values = []
 
 # Генерируем тестовые данные для каждой размерности n
 for n in n_values:
@@ -29,8 +34,17 @@ for n in n_values:
         grad = np.dot(X.T, (y_pred - Y)) + alpha * W
         # Обновляем веса
         W -= 0.01 * grad
+    # Определяем переменные и функцию для оптимизации с помощью CVXPY
+    x = cp.Variable(n + 1)
+    f = cp.sum(cp.logistic(-cp.multiply(Y, X @ x))) + alpha * cp.sum_squares(x[1:])
+    prob = cp.Problem(cp.Minimize(f))
+    # Решаем задачу с помощью CVX
+    start_time = time.time()
+    prob.solve()
+    end_time = time.time()
+    # Сохраняем результаты
+    solution_times.append(end_time - start_time)
+    global_minima.append(x.value)
+    optimal_values.append(prob.value)
     # Выводим результаты
     print(f"Размерность вектора переменных: {n}")
-    print(f"Тестовые данные:\n{X}")
-    print(f"Метки классов:\n{Y}")
-    print(f"Веса модели:\n{W}")
