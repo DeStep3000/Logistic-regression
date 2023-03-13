@@ -53,10 +53,12 @@ for n in n_values:
     times.append(times_n)
     # Выводим результаты
     print(f"Размерность вектора переменных: {n}")
+    print(f"Тестовые данные:\n{X}")
+    print(f"Метки классов:\n{Y}")
     print(f"Среднее время решения: {np.mean(times_n)} секунд")
     print(f"Глобальный минимум x*: {x_star[n_values.index(n)][i]}")
     print(f"Оптимальное значение целевой функции f0(x*): {f0_star[n_values.index(n)][i]}")
-    print("")
+    print("-------------------------------------------------------------------------------------")
 
 plt.plot(n_values, [np.mean(t) for t in times])
 plt.xlabel("Размерность вектора переменных")
