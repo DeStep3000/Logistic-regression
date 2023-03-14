@@ -39,9 +39,8 @@ def generate_dataset(n):
 # measure algorithm running time
 def measure_time(algorithm, X, y, theta, *args):
     start_time = time.time()
-    theta2 = algorithm(X, y, theta, *args)
+    algorithm(X, y, theta, *args)
     end_time = time.time()
-    print("\n", theta2)
     return end_time - start_time
 
 
