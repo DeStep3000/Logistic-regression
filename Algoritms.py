@@ -39,21 +39,29 @@ def generate_dataset(n):
 # measure algorithm running time
 def measure_time(algorithm, X, y, theta, *args):
     start_time = time.time()
-    algorithm(X, y, theta, *args)
+    theta2 = algorithm(X, y, theta, *args)
     end_time = time.time()
-    return end_time - start_time
+    return end_time - start_time, theta2
 
 
 # compare algorithms on different dataset sizes
+results_gd_theta = []
+results_nt_theta = []
 results = []
 for n in range(10, 101, 10):
     X, y = generate_dataset(n)
     X = np.insert(X, 0, 1, axis=1)
     theta = np.zeros(n + 1)
-    gd_time = measure_time(gradient_descent, X, y, theta, 0.1, 0.1, 1000)
-    nt_time = measure_time(newtons_method, X, y, theta, 0.1, 1000)
+    gd_time, theta_gd = measure_time(gradient_descent, X, y, theta, 0.1, 0.1, 1000)
+    nt_time, theta_nt = measure_time(newtons_method, X, y, theta, 0.1, 1000)
+    results_gd_theta.append(theta_gd)
+    results_nt_theta.append(theta_nt)
     results.append((n, gd_time, nt_time))
 
+for i, n in zip(range(10), range(10, 101, 10)):
+    print(
+        f'При размерности {n} коэффициенты, вычисляемые градиентным спуском,: {results_gd_theta[i]}\nМетодом Ньютона: {results_nt_theta[i]}')
+    print("---------------------------------------------------------------------------------------------------------------------------")
 plt.plot([r[0] for r in results], [r[1] for r in results], label='Gradient Descent')
 plt.plot([r[0] for r in results], [r[2] for r in results], label="Newton's Method")
 plt.xlabel('Dataset size (n)')
